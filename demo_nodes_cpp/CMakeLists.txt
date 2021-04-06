@@ -65,7 +65,8 @@ add_library(parameters_library SHARED
   src/parameters/parameter_blackboard.cpp
   src/parameters/set_and_get_parameters.cpp
   src/parameters/parameter_events_async.cpp
-  src/parameters/even_parameters_node.cpp)
+  src/parameters/even_parameters_node.cpp
+  src/parameters/get_parameters_from_yaml.cpp)
 add_library(topics_library SHARED
   src/topics/talker.cpp
   src/topics/talker_loaned_message.cpp
@@ -107,6 +108,9 @@ rclcpp_components_register_node(parameters_library
 rclcpp_components_register_node(parameters_library
   PLUGIN "demo_nodes_cpp::EvenParameterNode"
   EXECUTABLE even_parameters_node)
+rclcpp_components_register_node(parameters_library
+  PLUGIN "demo_nodes_cpp::GetParametersFromYaml"
+  EXECUTABLE get_parameters_from_yaml)
 
 rclcpp_components_register_node(topics_library
   PLUGIN "demo_nodes_cpp::Talker"
@@ -207,6 +211,10 @@ endif()
 # Install launch files.
 install(DIRECTORY
   launch
+  DESTINATION share/${PROJECT_NAME}/
+)
+install(DIRECTORY
+  param
   DESTINATION share/${PROJECT_NAME}/
 )
 

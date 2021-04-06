@@ -1,0 +1,7 @@
+<launch>
+  <arg name="param_file"/>
+
+  <node pkg="demo_nodes_cpp" exec="get_parameters_from_yaml" output="screen">
+    <param from="$(var param_file)" />
+  </node>
+</launch>

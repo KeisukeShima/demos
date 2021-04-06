@@ -1,0 +1,36 @@
+<launch>
+  <!-- <arg name="run_mode"/> -->
+  <let name="run_mode" value="online"/>
+  <let name="package_name" value="demo_nodes_cpp"/>
+
+  <!-- use if in let tag -->
+  <let name="input_file" value="$(find-pkg-share $(var package_name))/param/example.yaml" if="$(eval &quot;'$(var run_mode)'=='online'&quot;)"/>
+  <let name="input_file" value="$(find-pkg-share $(var package_name))/param/example2.yaml" if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)"/>
+
+  <include file="$(find-pkg-share demo_nodes_cpp)/launch/topics/get_parameters_from_yaml.launch.xml">
+    <arg name="param_file" value="$(var input_file)" />
+  </include>
+
+  <!-- check whether same name is allowed -->
+  <!-- and let value can override -->
+  <let name="run_mode" value="planning_simulation"/>
+  <let name="input_file" value="$(find-pkg-share $(var package_name))/param/example.yaml" if="$(eval &quot;'$(var run_mode)'=='online'&quot;)"/>
+  <let name="input_file" value="$(find-pkg-share $(var package_name))/param/example2.yaml" if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)"/>
+
+  <include file="$(find-pkg-share demo_nodes_cpp)/launch/topics/get_parameters_from_yaml.launch.xml">
+    <arg name="param_file" value="$(var input_file)" />
+  </include>
+
+  <!-- use arg inside include tag -->
+  <include file="$(find-pkg-share demo_nodes_cpp)/launch/topics/get_parameters_from_yaml.launch.xml">
+    <arg name="param_file" value="$(find-pkg-share $(var package_name))/param/example.yaml" if="$(eval &quot;'$(var run_mode)'=='online'&quot;)"/>
+    <arg name="param_file" value="$(find-pkg-share $(var package_name))/param/example2.yaml" if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)"/>
+  </include>
+
+  <!-- THIS IS INVALID -->
+  <!-- use let inside include tag -->
+  <!-- <include file="$(find-pkg-share demo_nodes_cpp)/launch/topics/get_parameters_from_yaml.launch.xml">
+    <let name="param_file" value="$(find-pkg-share $(var package_name))/param/example.yaml" if="$(eval &quot;'$(var run_mode)'=='online'&quot;)"/>
+    <let name="param_file" value="$(find-pkg-share $(var package_name))/param/example2.yaml" if="$(eval &quot;'$(var run_mode)'=='planning_simulation'&quot;)"/>
+  </include> -->
+</launch>

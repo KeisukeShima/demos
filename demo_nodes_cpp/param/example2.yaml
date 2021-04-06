@@ -1,0 +1,8 @@
+/**:
+  ros__parameters:
+    foo: 2
+    bar: "hello world2"
+    baz: 2.55
+    foobar: true
+    foobarbaz: [false, true]
+    toto: [0x45, 0x88]
