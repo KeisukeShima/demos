@@ -144,6 +144,12 @@ if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)
   find_package(launch_testing_ament_cmake REQUIRED)
   find_package(rmw_implementation_cmake REQUIRED)
+
+  add_launch_test(
+    test/talker_listener_launch_test.py
+    TIMEOUT 60
+    )
+
   # Add each test case.  Multi-executable tests can be specified in
   # semicolon-separated strings, like  exe1;exe2.
   set(tutorial_tests
