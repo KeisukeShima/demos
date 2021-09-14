@@ -148,7 +148,7 @@ if(BUILD_TESTING)
   add_launch_test(
     test/talker_listener_launch_test.py
     TIMEOUT 60
-    )
+  )
 
   # Add each test case.  Multi-executable tests can be specified in
   # semicolon-separated strings, like  exe1;exe2.

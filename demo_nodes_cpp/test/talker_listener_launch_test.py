@@ -95,6 +95,7 @@ class TestTalkerListenerLink(unittest.TestCase):
         finally:
             self.node.destroy_subscription(sub)
 
+
 @launch_testing.post_shutdown_test()
 class TestExecutablesTutorialAfterShutdown(unittest.TestCase):
 
