@@ -95,6 +95,34 @@ class TestTalkerListenerLink(unittest.TestCase):
         finally:
             self.node.destroy_subscription(sub)
 
+    def test_talker_transmits2(self, talker, proc_output):
+        # Expect the talker to publish strings on '/talker_chatter' and also write to stdout
+        msgs_rx = []
+
+        sub = self.node.create_subscription(
+            std_msgs.msg.String,
+            'talker_chatter',
+            lambda msg: msgs_rx.append(msg),
+            10
+        )
+        try:
+            # Wait until the talker transmits two messages over the ROS topic
+            end_time = time.time() + 10
+            while time.time() < end_time:
+                rclpy.spin_once(self.node, timeout_sec=0.1)
+                if len(msgs_rx) > 2:
+                    break
+
+            self.assertGreater(len(msgs_rx), 2)
+
+            # Make sure the talker also output the same data via stdout
+            for msg in msgs_rx:
+                proc_output.assertWaitFor(
+                    expected_output=msg.data, process=talker
+                )
+        finally:
+            self.node.destroy_subscription(sub)
+
 
 @launch_testing.post_shutdown_test()
 class TestExecutablesTutorialAfterShutdown(unittest.TestCase):
