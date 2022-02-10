@@ -1,0 +1,60 @@
+name: build-and-test-diff
+
+on:
+  pull_request:
+
+jobs:
+  build-and-test-diff:
+    runs-on: ubuntu-latest
+    container: ros:galactic
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Get modified packages
+        id: get-modified-packages
+        uses: autowarefoundation/autoware-github-actions/get-modified-packages@tier4/proposal
+
+      - name: Build and test
+        if: ${{ steps.get-modified-packages.outputs.modified-packages != '' }}
+        uses: autowarefoundation/autoware-github-actions/colcon-build-and-test@tier4/proposal
+        with:
+          rosdistro: galactic
+          target-packages: ${{ steps.get-modified-packages.outputs.modified-packages }}
+
+      - name: Check the existence of coverage files
+        id: check-file-existence
+        uses: autowarefoundation/autoware-github-actions/check-file-existence@tier4/proposal
+        with:
+          files: |
+            lcov/total_coverage.info
+            coveragepy/.coverage
+          condition: or
+
+      - name: Move coverage
+        if: ${{ steps.check-file-existence.outputs.exists == 'true' }}
+        run: |
+          mv lcov lcov-diff || true
+          mv coveragepy coveragepy-diff || true
+
+      - name: Restore cache
+        if: ${{ steps.check-file-existence.outputs.exists == 'true' }}
+        uses: actions/cache@v2
+        with:
+          path: |
+            ./lcov
+            ./coveragepy
+          key: build-${{ github.event.pull_request.base.sha }}
+
+      - name: Merge lcov coverage
+        if: ${{ steps.check-file-existence.outputs.exists == 'true' }}
+        run: |
+          lcov -a lcov-diff/total_coverage.info -a lcov/total_coverage.info -o lcov/merged_coverage.info
+
+      - name: Upload coverage to CodeCov
+        if: ${{ steps.check-file-existence.outputs.exists == 'true' }}
+        uses: codecov/codecov-action@v2
+        with:
+          files: lcov/merged_coverage.info,coveragepy-diff/.coverage
+          fail_ci_if_error: false
+          verbose: true
