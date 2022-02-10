@@ -19,9 +19,8 @@ jobs:
       - name: Build and test
         uses: autowarefoundation/autoware-github-actions/colcon-build-and-test@tier4/proposal
         with:
-          rosdistro: galactic
+          rosdistro: rolling
           target-packages: ${{ steps.get-self-packages.outputs.self-packages }}
-          build-depends-repos: build_depends.repos
 
       - name: Check the existence of coverage files
         id: check-file-existence
