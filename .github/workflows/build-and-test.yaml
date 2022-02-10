@@ -2,6 +2,8 @@ name: build-and-test
 
 on:
   push:
+    branches:
+      - galactic
   workflow_dispatch:
 
 jobs:
@@ -38,3 +40,11 @@ jobs:
           files: lcov/total_coverage.info,coveragepy/.coverage
           fail_ci_if_error: false
           verbose: true
+
+      - name: Cache build artifacts
+        uses: actions/cache@v2
+        with:
+          path: |
+            ./lcov
+            ./coveragepy
+          key: build-${{ github.sha }}
