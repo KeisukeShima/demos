@@ -61,3 +61,4 @@ jobs:
           files: lcov/total_coverage.info,coveragepy/.coverage
           fail_ci_if_error: false
           verbose: true
+          flags: total
