@@ -37,6 +37,11 @@ public:
       [this](const std_msgs::msg::String::SharedPtr msg) -> void
       {
         RCLCPP_INFO(this->get_logger(), "I heard: [%s]", msg->data.c_str());
+        if (msg->data.c_str() == "") {
+          RCLCPP_INFO(this->get_logger(), "This is dummy line to check coverage diff");
+        } else {
+          RCLCPP_INFO(this->get_logger(), "This is dummy line to check coverage diff");
+        }
       };
     // Create a subscription to the topic which can be matched with one or more compatible ROS
     // publishers.
