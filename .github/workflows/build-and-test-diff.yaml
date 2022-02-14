@@ -52,7 +52,7 @@ jobs:
       - name: Merge lcov coverage
         if: ${{ steps.check-file-existence.outputs.exists == 'true' }}
         run: |
-          lcov -a lcov-diff/total_coverage.info -a lcov/total_coverage.info -o lcov/merged_coverage.info
+          lcov --config-file .lcovrc -a lcov-diff/total_coverage.info -a lcov/total_coverage.info -o lcov/merged_coverage.info
 
       - name: Upload coverage to CodeCov
         if: ${{ steps.check-file-existence.outputs.exists == 'true' }}
