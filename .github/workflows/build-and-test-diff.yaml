@@ -61,3 +61,11 @@ jobs:
           files: lcov/merged_coverage.info,coveragepy-diff/.coverage
           fail_ci_if_error: false
           verbose: true
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report
+          path: |
+            lcov
+            lcov-diff
